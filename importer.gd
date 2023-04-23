@@ -43,6 +43,12 @@ func _get_import_options(path: String, preset_index: int) -> Array:
 
 
 func _import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> Error:
+	var file := FileAccess.open(source_file, FileAccess.READ)
+	var data := JSystemBinary.new(file)
+
+	if not data.file_type.substr(0, 3).to_lower() in ["bmd", "bdl"]:
+		return ERR_FILE_UNRECOGNIZED
+	
 	var root := Node3D.new()
 	root.name = "root"
 
