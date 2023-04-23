@@ -2,11 +2,14 @@
 extends EditorPlugin
 
 
+var importer
+
+
 func _enter_tree():
-	# Initialization of the plugin goes here.
-	pass
+	importer = preload("importer.gd").new()
+	add_import_plugin(importer)
 
 
 func _exit_tree():
-	# Clean-up of the plugin goes here.
-	pass
+	remove_import_plugin(importer)
+	importer = null
