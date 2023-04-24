@@ -50,7 +50,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 		return ERR_FILE_UNRECOGNIZED
 	
 	var root := Node3D.new()
-	root.name = "root"
+	root.name = source_file.get_file().split(".")[0]
 	
 	var packed := PackedScene.new()
 	packed.pack(root)
