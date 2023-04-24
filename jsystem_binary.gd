@@ -26,19 +26,19 @@ func _init(file: FileAccess):
 	chunk_count = file.get_32()
 	subversion = file.get_buffer(4).get_string_from_ascii()
 	file.get_buffer(12) # Padding
-
+	
 	print("Loading %s: subsystem version %s, type %s with %d chunks" % [file.get_path().get_file(), subsystem_version, file_type, chunk_count])
-
+	
 	for i in chunk_count:
 		var chunk := JSystemChunk.new()
 		chunk.type = file.get_buffer(4).get_string_from_ascii()
 		chunk.size = file.get_32()
 		chunk.data_offset = file.get_position()
-
+		
 		chunks.append(chunk)
 		file.seek((chunk.data_offset + chunk.size) - 8)
-
-		print("Loaded chunk '%s'(%s)" % [chunk.type, String.humanize_size(chunk.size)])
+		
+#		print("Loaded chunk '%s'(%s)" % [chunk.type, String.humanize_size(chunk.size)])
 
 
 class JSystemChunk extends RefCounted:
