@@ -45,9 +45,13 @@ func _get_import_options(path: String, preset_index: int) -> Array:
 func _import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> Error:
 	var file := FileAccess.open(source_file, FileAccess.READ)
 	var data := JSystemBinary.new(file)
-	
 	if not data.file_type.substr(0, 3).to_lower() in ["bmd", "bdl"]:
 		return ERR_FILE_UNRECOGNIZED
+	
+	file.seek(data.chunks[0].data_offset)
+	var header := BDLInfo.new(file)
+	file.seek(data.chunks[1].data_offset)
+	var vertex_data := BDLVertexData.new(file)
 	
 	var root := Node3D.new()
 	root.name = source_file.get_file().split(".")[0]
@@ -55,3 +59,30 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 	var packed := PackedScene.new()
 	packed.pack(root)
 	return ResourceSaver.save(packed, "%s.%s" % [save_path, _get_save_extension()])
+
+
+class BDLInfo extends RefCounted:
+	var flags: int
+	var matrix_group_count: int
+	var vertex_count: int
+	var hierarchy_data_offset: int
+	
+	
+	func _init(file: FileAccess) -> void:
+		flags = file.get_16()
+		file.get_16()
+		matrix_group_count = file.get_32()
+		vertex_count = file.get_32()
+		hierarchy_data_offset = file.get_32()
+
+
+class BDLVertexData extends RefCounted:
+	var vertex_format_offset: int
+	var position_data_offset: int
+	var normal_data_offset: int
+	
+	
+	func _init(file: FileAccess):
+		vertex_format_offset = file.get_32()
+		position_data_offset = file.get_32()
+		normal_data_offset = file.get_32()
