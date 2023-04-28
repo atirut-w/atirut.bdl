@@ -73,9 +73,6 @@ class BDL extends JSystemBinary:
 		
 		file.seek(chunks[1].data_offset)
 		vertex_data = VertexData.new(file)
-		file.seek(chunks[1].data_offset + vertex_data.position_data_offset)
-		var attributes := VertexAttributes.new(file)
-		print("%x" % attributes.attribute_type)
 	
 	
 	class VertexData extends RefCounted:
@@ -87,17 +84,3 @@ class BDL extends JSystemBinary:
 			file.get_32()
 			position_data_offset = file.get_32()
 			normal_data_offset = file.get_32()
-		
-		
-	class VertexAttributes:
-		var attribute_type: AttributeType
-		
-		enum AttributeType {
-			POSITION = 0x09,
-			NORMAL,
-			NULL = 0xff
-		}
-		
-		
-		func _init(file: FileAccess):
-			attribute_type = file.get_32()
