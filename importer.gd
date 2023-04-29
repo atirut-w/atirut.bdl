@@ -15,11 +15,11 @@ func _get_recognized_extensions() -> PackedStringArray:
 
 
 func _get_save_extension() -> String:
-	return "scn"
+	return "mesh"
 
 
 func _get_resource_type() -> String:
-	return "PackedScene"
+	return "ArrayMesh"
 
 
 func _get_priority() -> float:
@@ -48,9 +48,5 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 	if not data.file_type.substr(0, 3).to_lower() in ["bmd", "bdl"]:
 		return ERR_FILE_UNRECOGNIZED
 	
-	var root := Node3D.new()
-	root.name = source_file.get_file().split(".")[0]
-	
-	var packed := PackedScene.new()
-	packed.pack(root)
-	return ResourceSaver.save(packed, "%s.%s" % [save_path, _get_save_extension()])
+	var mesh := ArrayMesh.new()
+	return ResourceSaver.save(mesh, "%s.%s" % [save_path, _get_save_extension()])
