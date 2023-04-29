@@ -31,6 +31,7 @@ func _init(file: FileAccess):
 	
 	for i in chunk_count:
 		var chunk := JSystemChunk.new()
+		chunk.offset = file.get_position()
 		chunk.type = file.get_buffer(4).get_string_from_ascii()
 		chunk.size = file.get_32()
 		chunk.data_offset = file.get_position()
@@ -42,6 +43,8 @@ func _init(file: FileAccess):
 
 
 class JSystemChunk extends RefCounted:
+	## The offset of this chunk
+	var offset: int
 	## The type of this chunk.
 	var type: String
 	## The size of this chunk.
