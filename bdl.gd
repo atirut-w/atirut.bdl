@@ -1,9 +1,11 @@
 class_name BDL
 extends JSystemBinary
 
+
 var matrix_group_count: int
 var vertex_count: int
 var vertex_data: VertexData
+
 
 func _init(file: FileAccess):
 	super(file)
