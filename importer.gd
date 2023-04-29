@@ -48,8 +48,6 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 	if not data.file_type.substr(0, 3).to_lower() in ["bmd", "bdl"]:
 		return ERR_FILE_UNRECOGNIZED
 	
-	print(data.vertex_count)
-	
 	var root := Node3D.new()
 	root.name = source_file.get_file().split(".")[0]
 	
