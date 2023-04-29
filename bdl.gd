@@ -27,11 +27,11 @@ class VertexData extends RefCounted:
 	
 	func _init(file: FileAccess):
 		var chunk_start = file.get_position() - 8
-		vertex_attributes_offset = file.get_32()
-		position_data_offset = file.get_32()
-		normal_data_offset = file.get_32()
+		vertex_attributes_offset = chunk_start + file.get_32()
+		position_data_offset = chunk_start + file.get_32()
+		normal_data_offset = chunk_start + file.get_32()
 		
-		file.seek(chunk_start + vertex_attributes_offset)
+		file.seek(vertex_attributes_offset)
 		for _i in 256: # TODO: Something better that's not a `while true` loop
 			var attribute := VertexAttribute.new(file)
 			if attribute.type == VertexAttribute.AttributeType.NULL:
